@@ -73,7 +73,7 @@ hospedar o site (passo seguinte).
 ### 1. Criar conta e repositório no GitHub
 Se ainda não tem: crie uma conta em [github.com](https://github.com).
 Depois clique em **New repository** (botão verde), dê um nome (ex:
-`cadastre-app`), deixe como **Private** (o código fica só seu), e **não**
+`gestao_imobiliaria`), deixe como **Private** (o código fica só seu), e **não**
 marque nenhuma opção de inicializar com README — o projeto já tem um.
 
 ### 2. O `.gitignore` já vem pronto
@@ -88,7 +88,7 @@ git init
 git add .
 git commit -m "Primeira versão do Cadastre"
 git branch -M main
-git remote add origin https://github.com/SEU_USUARIO/cadastre-app.git
+git remote add origin https://github.com/SEU_USUARIO/gestao_imobiliaria.git
 git push -u origin main
 ```
 
@@ -106,7 +106,7 @@ git push
 ### 5. Hospedar (opcional, para acessar de qualquer lugar)
 Como o projeto é Next.js, o caminho mais simples é a
 [Vercel](https://vercel.com) (dos mesmos criadores do Next.js, tem plano
-gratuito): conecte sua conta GitHub, importe o repositório `cadastre-app`,
+gratuito): conecte sua conta GitHub, importe o repositório `gestao_imobiliaria`,
 cole as mesmas variáveis do `.env.local` na tela de configuração, e o
 deploy passa a ser automático a cada `git push`.
 
