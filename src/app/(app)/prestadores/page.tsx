@@ -3,6 +3,7 @@ import { SectionTitle } from "@/components/ui/section-title";
 import { Tag } from "@/components/ui/tag-stat";
 import { IconPhone } from "@/components/icons-extra";
 import { addProvider } from "./actions";
+import { SubmitButton } from "@/components/submit-button";
 
 export const dynamic = "force-dynamic";
 
@@ -49,7 +50,7 @@ export default async function PrestadoresPage() {
             <div className="field"><label>CPF / CNPJ</label><input name="document" /></div>
             <div className="field full"><label>Observações</label><textarea name="notes" placeholder="Histórico, condições de pagamento, disponibilidade…" /></div>
           </div>
-          <button type="submit" className="btn brass" style={{ marginTop: 16 }}>Salvar prestador</button>
+          <SubmitButton style={{ marginTop: 16 }}>Salvar prestador</SubmitButton>
         </form>
       </div>
     </>

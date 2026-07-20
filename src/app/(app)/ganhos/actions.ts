@@ -37,3 +37,9 @@ export async function toggleEarning(id: string, currentStatus: "recebido" | "pen
 
   revalidatePath("/ganhos");
 }
+
+export async function deleteEarning(id: string) {
+  const supabase = createClient();
+  await supabase.from("earnings").delete().eq("id", id);
+  revalidatePath("/ganhos");
+}

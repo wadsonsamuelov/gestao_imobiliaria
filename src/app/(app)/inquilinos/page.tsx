@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { SectionTitle } from "@/components/ui/section-title";
 import { addTenant } from "./actions";
+import { SubmitButton } from "@/components/submit-button";
 
 export const dynamic = "force-dynamic";
 
@@ -53,7 +54,7 @@ export default async function InquilinosPage() {
             <div className="field"><label>Profissão / Atividade</label><input name="profession" /></div>
             <div className="field"><label>Renda comprovada</label><input name="income" type="number" step="0.01" placeholder="R$" /></div>
           </div>
-          <button type="submit" className="btn brass" style={{ marginTop: 16 }}>Salvar ficha</button>
+          <SubmitButton style={{ marginTop: 16 }}>Salvar ficha</SubmitButton>
         </form>
       </div>
     </>

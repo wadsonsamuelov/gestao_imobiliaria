@@ -122,7 +122,7 @@ deploy passa a ser automático a cada `git push`.
 | Contratos | ✅ | — | Preencher contrato novo continua na ficha do imóvel |
 | Boletos & Juros | ✅ | — | "Marcar como pago" grava no banco; calculadora é só cálculo local |
 | Controle de Gastos | ✅ | ✅ | |
-| Meus Ganhos | ✅ | ✅ | Marcar recebido/pendente grava no banco |
+| Meus Ganhos | ✅ | ✅ | Marcar recebido/pendente e **excluir** (com confirmação) gravam no banco |
 | Vistorias | ✅ | — | Lista por imóvel; registrar fotos/checklist é o próximo passo |
 | Entrega de Chaves | ✅ | — | Registrar movimentação nova é o próximo passo |
 | Prestadores | ✅ | ✅ | |

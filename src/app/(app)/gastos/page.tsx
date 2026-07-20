@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Tag } from "@/components/ui/tag-stat";
 import { addExpense } from "./actions";
+import { SubmitButton } from "@/components/submit-button";
 
 export const dynamic = "force-dynamic";
 
@@ -84,7 +85,7 @@ export default async function GastosPage() {
               </select>
             </div>
           </div>
-          <button type="submit" className="btn secondary" style={{ marginTop: 16 }}>+ Lançar novo gasto</button>
+          <SubmitButton variant="secondary" style={{ marginTop: 16 }} pendingText="Lançando…">+ Lançar novo gasto</SubmitButton>
         </form>
       </div>
     </>

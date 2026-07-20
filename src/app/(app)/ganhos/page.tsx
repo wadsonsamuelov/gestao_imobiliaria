@@ -3,6 +3,7 @@ import { SectionTitle } from "@/components/ui/section-title";
 import { StatCard } from "@/components/ui/tag-stat";
 import { addEarning } from "./actions";
 import { EarningRow } from "./earning-row";
+import { SubmitButton } from "@/components/submit-button";
 
 export const dynamic = "force-dynamic";
 const fmt = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -39,7 +40,7 @@ export default async function GanhosPage() {
         <span className="card-crest" />
         <table>
           <thead>
-            <tr><th style={{ width: 36 }}></th><th>Descrição</th><th>Data</th><th>Valor</th><th>Situação</th></tr>
+            <tr><th style={{ width: 36 }}></th><th>Descrição</th><th>Data</th><th>Valor</th><th>Situação</th><th style={{ width: 40 }}></th></tr>
           </thead>
           <tbody>
             {list.map((e) => (
@@ -70,7 +71,7 @@ export default async function GanhosPage() {
               <input name="event_date" type="date" />
             </div>
           </div>
-          <button type="submit" className="btn brass" style={{ marginTop: 16 }}>+ Marcar ganho recebido</button>
+          <SubmitButton style={{ marginTop: 16 }} pendingText="Registrando…">+ Marcar ganho recebido</SubmitButton>
         </form>
       </div>
     </>

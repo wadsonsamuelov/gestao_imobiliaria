@@ -1,16 +1,25 @@
 "use client";
 
 import { useTransition } from "react";
-import { toggleEarning } from "./actions";
+import { toggleEarning, deleteEarning } from "./actions";
+import { IconTrash } from "@/components/icons-extra";
 
 export function EarningRow({ earning }: { earning: any }) {
   const [isPending, startTransition] = useTransition();
+  const [isDeleting, startDelete] = useTransition();
   const fmt = (n: number) => Number(n).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+  function handleDelete(e: React.MouseEvent) {
+    e.stopPropagation();
+    if (confirm(`Excluir o lançamento "${earning.description}"? Essa ação não pode ser desfeita.`)) {
+      startDelete(() => deleteEarning(earning.id));
+    }
+  }
 
   return (
     <tr
       className="row-hover"
-      style={{ opacity: isPending ? 0.5 : 1 }}
+      style={{ opacity: isPending || isDeleting ? 0.5 : 1 }}
       onClick={() => startTransition(() => toggleEarning(earning.id, earning.status))}
     >
       <td>
@@ -36,6 +45,25 @@ export function EarningRow({ earning }: { earning: any }) {
       <td className="mono">{fmt(earning.value)}</td>
       <td>
         {earning.status === "recebido" ? <span className="tag ok">Recebido</span> : <span className="tag neutral">Pendente</span>}
+      </td>
+      <td>
+        <button
+          onClick={handleDelete}
+          title="Excluir lançamento"
+          aria-label="Excluir lançamento"
+          style={{
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
+            color: "var(--ink-soft)",
+            padding: 4,
+            display: "flex",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--terracotta)")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--ink-soft)")}
+        >
+          <IconTrash />
+        </button>
       </td>
     </tr>
   );
