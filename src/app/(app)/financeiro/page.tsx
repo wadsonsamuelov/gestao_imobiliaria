@@ -1,16 +1,18 @@
 import { createClient } from "@/lib/supabase/server";
 import { SectionTitle } from "@/components/ui/section-title";
+import { SubmitButton } from "@/components/submit-button";
 import { BoletoRow } from "./boleto-row";
 import { InterestCalculator } from "./interest-calculator";
+import { addBoleto } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function FinanceiroPage() {
   const supabase = createClient();
-  const { data: boletos } = await supabase
-    .from("boletos")
-    .select("*, contracts(tenants(name), properties(code))")
-    .order("due_date", { ascending: false });
+  const [{ data: boletos }, { data: contracts }] = await Promise.all([
+    supabase.from("boletos").select("*, contracts(tenants(name), properties(code))").order("due_date", { ascending: false }),
+    supabase.from("contracts").select("id, tenants(name), properties(code)").eq("status", "ativo"),
+  ]);
 
   const list = boletos ?? [];
 
@@ -28,6 +30,27 @@ export default async function FinanceiroPage() {
           </tbody>
         </table>
         {list.length === 0 && <p className="muted" style={{ padding: 18, fontSize: 13 }}>Nenhum boleto lançado ainda.</p>}
+      </div>
+
+      <div className="divider" />
+      <SectionTitle>Emitir novo boleto</SectionTitle>
+      <div className="plan-card">
+        <span className="card-crest" />
+        <form action={addBoleto}>
+          <div className="form-grid">
+            <div className="field full">
+              <label>Contrato</label>
+              <select name="contract_id" required>
+                {(contracts ?? []).map((c: any) => (
+                  <option key={c.id} value={c.id}>{c.tenants?.name} — {c.properties?.code}</option>
+                ))}
+              </select>
+            </div>
+            <div className="field"><label>Valor</label><input name="value" type="number" step="0.01" required /></div>
+            <div className="field"><label>Vencimento</label><input name="due_date" type="date" required /></div>
+          </div>
+          <SubmitButton variant="secondary" style={{ marginTop: 16 }} pendingText="Emitindo…">+ Emitir boleto</SubmitButton>
+        </form>
       </div>
 
       <div className="divider" />

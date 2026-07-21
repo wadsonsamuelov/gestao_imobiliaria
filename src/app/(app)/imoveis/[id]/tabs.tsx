@@ -1,12 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Tag } from "@/components/ui/tag-stat";
+import { SubmitButton } from "@/components/submit-button";
+import { updateProperty, deleteProperty } from "../actions";
+import { InspectionsPanel } from "./inspections-panel";
+import { ContractPanel } from "./contract-panel";
 
 const STATUS_LABEL: Record<string, string> = { ocupado: "Ocupado", vago: "Vago", manutencao: "Manutenção" };
 const STATUS_VARIANT: Record<string, "ok" | "brass" | "alert"> = { ocupado: "ok", vago: "brass", manutencao: "alert" };
-const fmt = (n: number) => Number(n ?? 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 const fmtDate = (d: string) => new Date(d).toLocaleDateString("pt-BR");
 
 export function PropertyDetailTabs({
@@ -15,14 +19,24 @@ export function PropertyDetailTabs({
   contract,
   inspections,
   history,
+  tenants,
 }: {
   property: any;
   documents: any[];
   contract: any;
   inspections: any[];
   history: any[];
+  tenants: any[];
 }) {
   const [tab, setTab] = useState<"ficha" | "contrato" | "vistoria" | "historico">("ficha");
+  const [isDeleting, startDelete] = useTransition();
+  const router = useRouter();
+
+  function handleDelete() {
+    if (confirm(`Excluir o imóvel "${property.title}"? Isso remove também contratos, boletos e histórico ligados a ele. Essa ação não pode ser desfeita.`)) {
+      startDelete(() => deleteProperty(property.id));
+    }
+  }
 
   return (
     <>
@@ -37,6 +51,9 @@ export function PropertyDetailTabs({
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
           <Tag variant={STATUS_VARIANT[property.status] ?? "neutral"}>{STATUS_LABEL[property.status] ?? property.status}</Tag>
           <Link href="/imoveis" className="btn secondary">&larr; Voltar</Link>
+          <button className="btn secondary" style={{ borderColor: "var(--terracotta)", color: "var(--terracotta)" }} disabled={isDeleting} onClick={handleDelete}>
+            {isDeleting ? "Excluindo…" : "Excluir imóvel"}
+          </button>
         </div>
       </div>
 
@@ -52,16 +69,36 @@ export function PropertyDetailTabs({
         <div className="grid grid-2">
           <div className="plan-card">
             <span className="card-crest" />
-            <div className="form-grid">
-              <div className="field"><label>Tipo de imóvel</label><input defaultValue={property.type} readOnly /></div>
-              <div className="field"><label>Área</label><input defaultValue={property.area_m2 ? `${property.area_m2} m²` : "—"} readOnly /></div>
-              <div className="field"><label>Proprietário</label><input defaultValue={property.owners?.name ?? "—"} readOnly /></div>
-              <div className="field"><label>Inquilino atual</label><input defaultValue={contract?.tenants?.name ?? "— vago —"} readOnly /></div>
-              <div className="field"><label>Valor de aluguel</label><input defaultValue={fmt(property.rent_value)} readOnly /></div>
-              <div className="field"><label>IPTU</label><input defaultValue={fmt(property.iptu_value)} readOnly /></div>
-              <div className="field"><label>Condomínio</label><input defaultValue={property.condo_value ? fmt(property.condo_value) : "—"} readOnly /></div>
-              <div className="field"><label>Status atual</label><input defaultValue={STATUS_LABEL[property.status]} readOnly /></div>
-            </div>
+            <form action={updateProperty.bind(null, property.id)}>
+              <div className="form-grid">
+                <div className="field">
+                  <label>Tipo de imóvel</label>
+                  <select name="type" defaultValue={property.type}>
+                    <option value="apartamento">Apartamento</option>
+                    <option value="casa">Casa</option>
+                    <option value="comercial">Comercial</option>
+                    <option value="industrial">Industrial</option>
+                    <option value="terreno">Terreno</option>
+                  </select>
+                </div>
+                <div className="field"><label>Área (m²)</label><input name="area_m2" type="number" step="0.01" defaultValue={property.area_m2 ?? ""} /></div>
+                <div className="field full"><label>Título</label><input name="title" defaultValue={property.title} required /></div>
+                <div className="field full"><label>Endereço</label><input name="address" defaultValue={property.address} /></div>
+                <div className="field">
+                  <label>Status atual</label>
+                  <select name="status" defaultValue={property.status}>
+                    <option value="vago">Vago</option>
+                    <option value="ocupado">Ocupado</option>
+                    <option value="manutencao">Manutenção</option>
+                  </select>
+                </div>
+                <div className="field"><label>Valor de aluguel</label><input name="rent_value" type="number" step="0.01" defaultValue={property.rent_value ?? ""} /></div>
+                <div className="field"><label>IPTU</label><input name="iptu_value" type="number" step="0.01" defaultValue={property.iptu_value ?? ""} /></div>
+                <div className="field"><label>Condomínio</label><input name="condo_value" type="number" step="0.01" defaultValue={property.condo_value ?? ""} /></div>
+              </div>
+              <p className="muted" style={{ fontSize: 11.5, marginTop: 10 }}>Proprietário: {property.owners?.name ?? "—"} · Inquilino atual: {contract?.tenants?.name ?? "— vago —"}</p>
+              <SubmitButton style={{ marginTop: 14 }} pendingText="Salvando…">Salvar alterações</SubmitButton>
+            </form>
           </div>
           <div className="plan-card">
             <span className="card-crest" />
@@ -80,44 +117,9 @@ export function PropertyDetailTabs({
         </div>
       )}
 
-      {tab === "contrato" && (
-        <div className="plan-card">
-          <span className="card-crest" />
-          {contract ? (
-            <div className="form-grid">
-              <div className="field"><label>Locatário</label><input defaultValue={contract.tenants?.name} readOnly /></div>
-              <div className="field"><label>Valor mensal</label><input defaultValue={fmt(contract.rent_value)} readOnly /></div>
-              <div className="field"><label>Início</label><input defaultValue={fmtDate(contract.start_date)} readOnly /></div>
-              <div className="field"><label>Prazo</label><input defaultValue={`${contract.duration_months} meses`} readOnly /></div>
-              <div className="field"><label>Dia de vencimento</label><input defaultValue={contract.due_day} readOnly /></div>
-              <div className="field"><label>Índice de reajuste</label><input defaultValue={contract.adjustment_index} readOnly /></div>
-              <div className="field"><label>Multa por atraso</label><input defaultValue={`${contract.late_fee_pct}%`} readOnly /></div>
-              <div className="field"><label>Juros de mora</label><input defaultValue={`${contract.interest_pct_month}% a.m.`} readOnly /></div>
-              <div className="field"><label>Garantia</label><input defaultValue={contract.guarantee_type} readOnly /></div>
-            </div>
-          ) : (
-            <p className="muted">Este imóvel não tem contrato ativo no momento.</p>
-          )}
-        </div>
-      )}
+      {tab === "contrato" && <ContractPanel propertyId={property.id} contract={contract} tenants={tenants} />}
 
-      {tab === "vistoria" && (
-        <div className="plan-card">
-          <span className="card-crest" />
-          <div className="small-caps" style={{ fontSize: 11, marginBottom: 14, color: "var(--bronze)" }}>Vistorias registradas</div>
-          {inspections.length === 0 && <p className="muted" style={{ fontSize: 13 }}>Nenhuma vistoria registrada ainda.</p>}
-          <div className="timeline">
-            {inspections.map((v) => (
-              <div className="tl-item" key={v.id}>
-                <div className="tl-dot" />
-                <div className="tl-date">{fmtDate(v.inspection_date)}</div>
-                <div className="tl-title">Vistoria de {v.type} — {v.status}</div>
-                <div className="tl-desc">{v.inspection_photos?.length ?? 0} foto(s) anexada(s)</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {tab === "vistoria" && <InspectionsPanel propertyId={property.id} inspections={inspections} />}
 
       {tab === "historico" && (
         <div className="plan-card">

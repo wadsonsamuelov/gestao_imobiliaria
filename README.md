@@ -34,6 +34,7 @@ No painel do Supabase → **SQL Editor**, rode nesta ordem:
 1. `supabase/migrations/0001_init.sql`
 2. `supabase/migrations/0002_seed.sql`
 3. `supabase/migrations/0003_earnings.sql`
+4. `supabase/migrations/0004_storage.sql` (cria o espaço de armazenamento das fotos de vistoria)
 
 ### 3. Criar os 2 usuários
 **Authentication → Users → Add user** — um para você, um para a outra
@@ -114,24 +115,33 @@ deploy passa a ser automático a cada `git push`.
 
 ## O que já está ligado ao banco de verdade
 
-| Seção | Lista | Cadastro novo | Observação |
-|---|---|---|---|
-| Painel | ✅ | — | Números calculados ao vivo |
-| Imóveis | ✅ | — | Ficha, contrato, vistoria e histórico já leem o banco |
-| Inquilinos | ✅ | ✅ | |
-| Contratos | ✅ | — | Preencher contrato novo continua na ficha do imóvel |
-| Boletos & Juros | ✅ | — | "Marcar como pago" grava no banco; calculadora é só cálculo local |
-| Controle de Gastos | ✅ | ✅ | |
-| Meus Ganhos | ✅ | ✅ | Marcar recebido/pendente e **excluir** (com confirmação) gravam no banco |
-| Vistorias | ✅ | — | Lista por imóvel; registrar fotos/checklist é o próximo passo |
-| Entrega de Chaves | ✅ | — | Registrar movimentação nova é o próximo passo |
-| Prestadores | ✅ | ✅ | |
-| Histórico | ✅ | — | Alimentado automaticamente conforme os eventos acontecerem |
+| Seção | Lista | Criar | Editar | Excluir | Observação |
+|---|---|---|---|---|---|
+| Painel | ✅ | — | — | — | Números calculados ao vivo |
+| Imóveis | ✅ | ✅ | ✅ | ✅ | Ficha, contrato e vistoria editáveis dentro do próprio imóvel |
+| Inquilinos | ✅ | ✅ | ✅ | ✅ | Exclusão bloqueada se houver contrato vinculado (integridade do banco) |
+| Contratos | ✅ | ✅ | ✅ | — | Criação e edição ficam na ficha do imóvel; "excluir" é "encerrar contrato" |
+| Boletos & Juros | ✅ | ✅ | ✅ | ✅ | "Marcar como pago" continua disponível; calculadora é só cálculo local |
+| Controle de Gastos | ✅ | ✅ | ✅ | ✅ | |
+| Meus Ganhos | ✅ | ✅ | — | ✅ | Marcar recebido/pendente e excluir |
+| Vistorias | ✅ | ✅ | — | ✅ | **Upload de fotos de verdade** (Supabase Storage), dentro da ficha do imóvel |
+| Entrega de Chaves | ✅ | ✅ | — | ✅ | |
+| Prestadores | ✅ | ✅ | ✅ | ✅ | |
+| Histórico | ✅ | — | — | — | Alimentado automaticamente conforme os eventos acontecerem |
+
+### Sobre exclusões bloqueadas
+Algumas exclusões podem falhar silenciosamente por design — é o banco protegendo a
+integridade dos dados. Por exemplo: não dá para excluir um inquilino que tem
+contrato ativo, nem um imóvel referenciado por um contrato antigo, sem antes
+remover essas referências. Isso é intencional (evita perder histórico
+financeiro/jurídico por engano), mas se quiser que o sistema avise com uma
+mensagem clara em vez de simplesmente não excluir, é um ajuste pontual em cada
+`actions.ts`.
 
 ## Próximos passos sugeridos
-1. Formulário de "novo imóvel" e "novo contrato" (hoje só existem os de
-   inquilino, gasto, prestador e ganho — mesmo padrão, é só repetir).
-2. Upload de fotos de vistoria (Supabase Storage).
-3. Geração de PDF do contrato preenchido.
+1. Checklist de itens por vistoria (hoje só fotos + observações gerais).
+2. Geração de PDF do contrato preenchido.
+3. Mensagens de erro visíveis quando uma exclusão é bloqueada pelo banco (ver
+   nota acima).
 4. Antes de qualquer lançamento público: revisão jurídica do contrato e
    política de privacidade (LGPD).

@@ -27,3 +27,25 @@ export async function addExpense(formData: FormData) {
 
   revalidatePath("/gastos");
 }
+
+export async function updateExpense(id: string, formData: FormData) {
+  const supabase = createClient();
+  await supabase
+    .from("expenses")
+    .update({
+      description: String(formData.get("description") ?? "").trim(),
+      category: String(formData.get("category") ?? "outros"),
+      value: parseFloat(String(formData.get("value") ?? "0")),
+      expense_date: String(formData.get("expense_date") ?? ""),
+      paid_by: String(formData.get("paid_by") ?? "administradora"),
+    })
+    .eq("id", id);
+
+  revalidatePath("/gastos");
+}
+
+export async function deleteExpense(id: string) {
+  const supabase = createClient();
+  await supabase.from("expenses").delete().eq("id", id);
+  revalidatePath("/gastos");
+}

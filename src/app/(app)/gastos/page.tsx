@@ -1,8 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { SectionTitle } from "@/components/ui/section-title";
-import { Tag } from "@/components/ui/tag-stat";
 import { addExpense } from "./actions";
 import { SubmitButton } from "@/components/submit-button";
+import { ExpenseRow } from "./expense-row";
 
 export const dynamic = "force-dynamic";
 
@@ -32,19 +32,10 @@ export default async function GastosPage() {
         <span className="card-crest" />
         <table>
           <thead>
-            <tr><th>Imóvel</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th>Data</th><th>Pago por</th></tr>
+            <tr><th>Imóvel</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th>Data</th><th>Pago por</th><th></th></tr>
           </thead>
           <tbody>
-            {list.map((e: any) => (
-              <tr key={e.id} className="row-hover">
-                <td className="mono">{e.properties?.code}</td>
-                <td style={{ fontWeight: 600 }}>{e.description}</td>
-                <td><Tag>{CATEGORY_LABEL[e.category] ?? e.category}</Tag></td>
-                <td className="mono">{fmt(Number(e.value))}</td>
-                <td>{new Date(e.expense_date).toLocaleDateString("pt-BR")}</td>
-                <td>{PAID_BY_LABEL[e.paid_by] ?? e.paid_by}</td>
-              </tr>
-            ))}
+            {list.map((e: any) => <ExpenseRow key={e.id} e={e} />)}
           </tbody>
         </table>
         {list.length === 0 && <p className="muted" style={{ padding: 18, fontSize: 13 }}>Nenhum gasto lançado ainda.</p>}

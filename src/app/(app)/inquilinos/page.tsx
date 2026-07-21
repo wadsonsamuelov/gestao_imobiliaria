@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { SectionTitle } from "@/components/ui/section-title";
 import { addTenant } from "./actions";
 import { SubmitButton } from "@/components/submit-button";
+import { TenantRow } from "./tenant-row";
 
 export const dynamic = "force-dynamic";
 
@@ -21,20 +22,12 @@ export default async function InquilinosPage() {
         <span className="card-crest" />
         <table>
           <thead>
-            <tr><th>Nome</th><th>CPF/CNPJ</th><th>Telefone</th><th>Imóvel</th><th>Renda</th></tr>
+            <tr><th>Nome</th><th>CPF/CNPJ</th><th>Telefone</th><th>Imóvel</th><th>Renda</th><th></th></tr>
           </thead>
           <tbody>
             {list.map((t: any) => {
               const activeContract = t.contracts?.find((c: any) => c.status === "ativo");
-              return (
-                <tr key={t.id} className="row-hover">
-                  <td style={{ fontWeight: 600 }}>{t.name}</td>
-                  <td className="mono muted">{t.document ?? "—"}</td>
-                  <td>{t.phone ?? "—"}</td>
-                  <td className="mono">{activeContract?.properties?.code ?? "—"}</td>
-                  <td className="mono">{t.income ? Number(t.income).toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : "—"}</td>
-                </tr>
-              );
+              return <TenantRow key={t.id} tenant={t} propertyCode={activeContract?.properties?.code ?? null} />;
             })}
           </tbody>
         </table>

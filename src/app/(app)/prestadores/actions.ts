@@ -24,3 +24,25 @@ export async function addProvider(formData: FormData) {
 
   revalidatePath("/prestadores");
 }
+
+export async function updateProvider(id: string, formData: FormData) {
+  const supabase = createClient();
+  await supabase
+    .from("providers")
+    .update({
+      name: String(formData.get("name") ?? "").trim(),
+      specialty: String(formData.get("specialty") ?? "") || null,
+      phone: String(formData.get("phone") ?? "") || null,
+      document: String(formData.get("document") ?? "") || null,
+      notes: String(formData.get("notes") ?? "") || null,
+    })
+    .eq("id", id);
+
+  revalidatePath("/prestadores");
+}
+
+export async function deleteProvider(id: string) {
+  const supabase = createClient();
+  await supabase.from("providers").delete().eq("id", id);
+  revalidatePath("/prestadores");
+}

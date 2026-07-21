@@ -22,6 +22,9 @@ export default async function ImoveisPage() {
   return (
     <>
       <SectionTitle count={properties?.length}>Imóveis administrados</SectionTitle>
+      <div style={{ marginTop: -14, marginBottom: 20 }}>
+        <Link href="/imoveis/novo" className="btn brass">+ Novo imóvel</Link>
+      </div>
 
       {error && <p style={{ color: "var(--terracotta)" }}>Erro ao carregar imóveis: {error.message}</p>}
 
