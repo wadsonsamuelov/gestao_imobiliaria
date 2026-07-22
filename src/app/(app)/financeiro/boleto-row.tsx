@@ -10,8 +10,14 @@ export function BoletoRow({ boleto }: { boleto: any }) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const fmt = (n: number) => Number(n).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-  const diasAtraso =
-    boleto.status === "atrasado" ? Math.floor((Date.now() - new Date(boleto.due_date).getTime()) / 86400000) : 0;
+
+  // O campo "status" salvo no banco não se atualiza sozinho com o passar do tempo —
+  // por isso calculamos aqui, comparando a data de vencimento com hoje, se o boleto
+  // está realmente atrasado, em vez de confiar cegamente no valor gravado.
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const dueDate = new Date(boleto.due_date + "T00:00:00");
+  const diasAtraso = Math.floor((today.getTime() - dueDate.getTime()) / 86400000);
+  const effectiveStatus = boleto.status === "pago" ? "pago" : diasAtraso > 0 ? "atrasado" : "a_vencer";
 
   function handleDelete() {
     if (confirm("Excluir este boleto?")) {
@@ -33,12 +39,12 @@ export function BoletoRow({ boleto }: { boleto: any }) {
       <td className="mono">{fmt(boleto.value)}</td>
       <td>{new Date(boleto.due_date).toLocaleDateString("pt-BR")}</td>
       <td>
-        {boleto.status === "pago" && <span className="tag ok">Pago</span>}
-        {boleto.status === "atrasado" && <span className="tag alert">Atrasado · {diasAtraso}d</span>}
-        {boleto.status === "a_vencer" && <span className="tag neutral">A vencer</span>}
+        {effectiveStatus === "pago" && <span className="tag ok">Pago</span>}
+        {effectiveStatus === "atrasado" && <span className="tag alert">Atrasado · {diasAtraso}d</span>}
+        {effectiveStatus === "a_vencer" && <span className="tag neutral">A vencer</span>}
       </td>
       <td className="muted" style={{ display: "flex", gap: 10, alignItems: "center" }}>
-        {boleto.status !== "pago" && (
+        {effectiveStatus !== "pago" && (
           <button className="btn secondary" style={{ padding: "5px 10px", fontSize: 10 }} onClick={() => startTransition(() => markBoletoPaid(boleto.id))}>
             Marcar como pago
           </button>

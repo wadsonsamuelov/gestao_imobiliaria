@@ -49,8 +49,7 @@ export default async function ImoveisPage() {
 
       {(properties ?? []).length === 0 && !error && (
         <p className="muted" style={{ marginTop: 16 }}>
-          Nenhum imóvel cadastrado ainda. Rode o seed (<code>0002_seed.sql</code>) ou cadastre um pelo Supabase Table Editor
-          por enquanto — o formulário de cadastro é o próximo passo natural aqui.
+          Nenhum imóvel cadastrado ainda. Clique em <strong>+ Novo imóvel</strong> acima para começar.
         </p>
       )}
     </>

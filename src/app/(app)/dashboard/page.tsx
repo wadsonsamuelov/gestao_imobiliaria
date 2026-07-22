@@ -6,6 +6,7 @@ export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
   const supabase = createClient();
+  const todayStr = new Date().toISOString().slice(0, 10);
 
   const [{ count: totalImoveis }, { count: ocupados }, { count: contratosAtivos }, { data: boletosAtrasados }, { count: vistoriasAgendadas }, { data: recentHistory }] =
     await Promise.all([
@@ -15,7 +16,8 @@ export default async function DashboardPage() {
       supabase
         .from("boletos")
         .select("value, due_date, contracts(tenant_id, tenants(name), properties(code))")
-        .eq("status", "atrasado"),
+        .neq("status", "pago")
+        .lt("due_date", todayStr),
       supabase.from("inspections").select("*", { count: "exact", head: true }).eq("status", "agendada"),
       supabase
         .from("property_history")

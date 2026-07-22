@@ -110,6 +110,16 @@ export function IconProvider({ className }: IconProps) {
   );
 }
 
+export function IconOwner({ className }: IconProps) {
+  return (
+    <svg className={className} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path d="M4 21V10l8-6 8 6v11" />
+      <path d="M9 21v-5a3 3 0 0 1 6 0v5" />
+      <circle cx="12" cy="7.5" r="1.4" />
+    </svg>
+  );
+}
+
 export function IconSun({ className }: IconProps) {
   return (
     <svg className={className} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
