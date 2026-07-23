@@ -15,7 +15,7 @@ export default async function PropertyDetailPage({ params }: { params: { id: str
 
   if (!property) notFound();
 
-  const [{ data: documents }, { data: contract }, { data: inspections }, { data: history }, { data: tenants }] = await Promise.all([
+  const [{ data: documents }, { data: contract }, { data: inspections }, { data: history }, { data: tenants }, { data: templates }] = await Promise.all([
     supabase.from("property_documents").select("*").eq("property_id", params.id),
     supabase
       .from("contracts")
@@ -26,6 +26,7 @@ export default async function PropertyDetailPage({ params }: { params: { id: str
     supabase.from("inspections").select("*, inspection_photos(id, url)").eq("property_id", params.id).order("inspection_date", { ascending: false }),
     supabase.from("property_history").select("*").eq("property_id", params.id).order("event_date", { ascending: false }),
     supabase.from("tenants").select("id, name").order("name"),
+    supabase.from("contract_templates").select("id, name").order("name"),
   ]);
 
   return (
@@ -36,6 +37,7 @@ export default async function PropertyDetailPage({ params }: { params: { id: str
       inspections={inspections ?? []}
       history={history ?? []}
       tenants={tenants ?? []}
+      templates={templates ?? []}
     />
   );
 }

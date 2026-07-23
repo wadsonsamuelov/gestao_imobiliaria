@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   IconPanel, IconBuilding, IconTenant, IconContract, IconCash, IconWallet,
-  IconDocs, IconCamera, IconKey, IconProvider, IconHistory, IconOwner,
+  IconDocs, IconCamera, IconKey, IconProvider, IconHistory, IconOwner, IconTemplate,
 } from "./icons";
 
 const NAV = [
@@ -16,6 +16,7 @@ const NAV = [
       { href: "/proprietarios", name: "Proprietários", Icon: IconOwner },
       { href: "/inquilinos", name: "Inquilinos", Icon: IconTenant },
       { href: "/contratos", name: "Contratos", Icon: IconContract },
+      { href: "/modelos-contrato", name: "Modelos de Contrato", Icon: IconTemplate },
     ],
   },
   {

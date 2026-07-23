@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { SubmitButton } from "@/components/submit-button";
 import { addContract, updateContract, endContract } from "./contract-actions";
 
-export function ContractPanel({ propertyId, contract, tenants }: { propertyId: string; contract: any; tenants: any[] }) {
+export function ContractPanel({ propertyId, contract, tenants, templates }: { propertyId: string; contract: any; tenants: any[]; templates: any[] }) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -52,6 +52,13 @@ export function ContractPanel({ propertyId, contract, tenants }: { propertyId: s
               </select>
             </div>
             <div className="field"><label>Fiador (se aplicável)</label><input name="guarantor_name" /></div>
+            <div className="field">
+              <label>Modelo de contrato</label>
+              <select name="template_id">
+                <option value="">Padrão da organização (ou embutido do sistema)</option>
+                {templates.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+              </select>
+            </div>
             <div className="field full"><label>Cláusulas particulares</label><textarea name="special_clauses" /></div>
           </div>
           <SubmitButton style={{ marginTop: 16 }} pendingText="Salvando…">Gerar contrato</SubmitButton>
@@ -89,6 +96,13 @@ export function ContractPanel({ propertyId, contract, tenants }: { propertyId: s
             </select>
           </div>
           <div className="field"><label>Fiador</label><input name="guarantor_name" defaultValue={contract.guarantor_name ?? ""} /></div>
+          <div className="field">
+            <label>Modelo de contrato</label>
+            <select name="template_id" defaultValue={contract.template_id ?? ""}>
+              <option value="">Padrão da organização (ou embutido do sistema)</option>
+              {templates.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+            </select>
+          </div>
           <div className="field">
             <label>Situação</label>
             <select name="status" defaultValue={contract.status}>

@@ -120,6 +120,16 @@ export function IconOwner({ className }: IconProps) {
   );
 }
 
+export function IconTemplate({ className }: IconProps) {
+  return (
+    <svg className={className} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <rect x="5" y="3" width="12" height="16" rx="1" />
+      <path d="M9 8h6M9 11h6M9 14h4" />
+      <path d="M8 21h10a2 2 0 0 0 2-2V7" />
+    </svg>
+  );
+}
+
 export function IconSun({ className }: IconProps) {
   return (
     <svg className={className} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">

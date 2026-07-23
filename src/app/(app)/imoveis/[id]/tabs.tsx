@@ -20,6 +20,7 @@ export function PropertyDetailTabs({
   inspections,
   history,
   tenants,
+  templates,
 }: {
   property: any;
   documents: any[];
@@ -27,6 +28,7 @@ export function PropertyDetailTabs({
   inspections: any[];
   history: any[];
   tenants: any[];
+  templates: any[];
 }) {
   const [tab, setTab] = useState<"ficha" | "contrato" | "vistoria" | "historico">("ficha");
   const [isDeleting, startDelete] = useTransition();
@@ -117,7 +119,7 @@ export function PropertyDetailTabs({
         </div>
       )}
 
-      {tab === "contrato" && <ContractPanel propertyId={property.id} contract={contract} tenants={tenants} />}
+      {tab === "contrato" && <ContractPanel propertyId={property.id} contract={contract} tenants={tenants} templates={templates} />}
 
       {tab === "vistoria" && <InspectionsPanel propertyId={property.id} inspections={inspections} />}
 

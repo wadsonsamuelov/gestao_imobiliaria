@@ -40,6 +40,7 @@ export async function addContract(propertyId: string, formData: FormData) {
     guarantee_type: String(formData.get("guarantee_type") ?? "caucao"),
     guarantor_name: String(formData.get("guarantor_name") ?? "") || null,
     special_clauses: String(formData.get("special_clauses") ?? "") || null,
+    template_id: String(formData.get("template_id") ?? "") || null,
     status: "ativo",
   });
 
@@ -61,6 +62,7 @@ export async function updateContract(id: string, propertyId: string, formData: F
       guarantee_type: String(formData.get("guarantee_type") ?? "caucao"),
       guarantor_name: String(formData.get("guarantor_name") ?? "") || null,
       special_clauses: String(formData.get("special_clauses") ?? "") || null,
+      template_id: String(formData.get("template_id") ?? "") || null,
       status: String(formData.get("status") ?? "ativo"),
     })
     .eq("id", id);
