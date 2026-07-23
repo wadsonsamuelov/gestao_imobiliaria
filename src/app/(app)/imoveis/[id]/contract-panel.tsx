@@ -63,7 +63,12 @@ export function ContractPanel({ propertyId, contract, tenants }: { propertyId: s
   return (
     <div className="plan-card" style={{ opacity: isPending ? 0.5 : 1 }}>
       <span className="card-crest" />
-      <div className="small-caps" style={{ fontSize: 11, marginBottom: 14, color: "var(--bronze)" }}>Contrato com {contract.tenants?.name}</div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+        <div className="small-caps" style={{ fontSize: 11, color: "var(--bronze)" }}>Contrato com {contract.tenants?.name}</div>
+        <a href={`/api/contratos/${contract.id}/pdf`} target="_blank" rel="noopener noreferrer" className="btn brass" style={{ fontSize: 10.5, padding: "8px 14px" }}>
+          Gerar contrato em PDF
+        </a>
+      </div>
       <form action={updateContract.bind(null, contract.id, propertyId)}>
         <div className="form-grid">
           <div className="field"><label>Valor mensal</label><input name="rent_value" type="number" step="0.01" defaultValue={contract.rent_value} /></div>
