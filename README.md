@@ -35,6 +35,7 @@ No painel do Supabase → **SQL Editor**, rode nesta ordem:
 2. `supabase/migrations/0002_seed.sql`
 3. `supabase/migrations/0003_earnings.sql`
 4. `supabase/migrations/0004_storage.sql` (cria o espaço de armazenamento das fotos de vistoria)
+5. `supabase/migrations/0005_contract_templates.sql` (cria os modelos de contrato editáveis)
 
 ### 3. Criar os 2 usuários
 **Authentication → Users → Add user** — um para você, um para a outra
