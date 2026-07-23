@@ -21,7 +21,7 @@ export default async function ContratosPage() {
         <span className="card-crest" />
         <table>
           <thead>
-            <tr><th>Imóvel</th><th>Inquilino</th><th>Valor</th><th>Início</th><th>Reajuste</th><th>Situação</th></tr>
+            <tr><th>Imóvel</th><th>Inquilino</th><th>Valor</th><th>Início</th><th>Reajuste</th><th>Situação</th><th></th></tr>
           </thead>
           <tbody>
             {list.map((c: any) => (
@@ -37,6 +37,11 @@ export default async function ContratosPage() {
                 <td><Tag>{c.adjustment_index}</Tag></td>
                 <td>
                   {c.status === "ativo" ? <Tag variant="ok">Ativo</Tag> : c.status === "encerrado" ? <Tag variant="neutral">Encerrado</Tag> : <Tag variant="brass">Renovação</Tag>}
+                </td>
+                <td>
+                  <a href={`/api/contratos/${c.id}/pdf`} target="_blank" rel="noopener noreferrer" className="btn secondary" style={{ padding: "5px 10px", fontSize: 10 }}>
+                    PDF
+                  </a>
                 </td>
               </tr>
             ))}

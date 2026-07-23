@@ -23,18 +23,19 @@ export default async function ModelosContratoPage() {
         </p>
       )}
 
-      <div className="plan-card" style={{ padding: 0 }}>
-        <span className="card-crest" />
-        <table>
-          <thead>
-            <tr><th>Nome</th><th>Situação</th><th>Atualizado em</th><th></th></tr>
-          </thead>
-          <tbody>
-            {list.map((t) => <TemplateRow key={t.id} template={t} />)}
-          </tbody>
-        </table>
-        {list.length === 0 && <p className="muted" style={{ padding: 18, fontSize: 13 }}>Nenhum modelo cadastrado ainda.</p>}
-      </div>
+      {list.length > 0 && (
+        <div className="plan-card" style={{ padding: 0 }}>
+          <span className="card-crest" />
+          <table>
+            <thead>
+              <tr><th>Nome</th><th>Situação</th><th>Atualizado em</th><th></th></tr>
+            </thead>
+            <tbody>
+              {list.map((t) => <TemplateRow key={t.id} template={t} />)}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <div className="divider" />
       <SectionTitle>Novo modelo</SectionTitle>
