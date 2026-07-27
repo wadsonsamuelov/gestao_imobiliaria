@@ -54,7 +54,7 @@ export default function LoginPage() {
 
   if (mode === "forgot") {
     return (
-      <main style={{ maxWidth: 360, margin: "80px auto", fontFamily: "sans-serif" }}>
+      <main style={{ maxWidth: 360, margin: "80px auto", padding: "0 20px", fontFamily: "sans-serif" }}>
         <h1 style={{ fontSize: 22, marginBottom: 24 }}>Recuperar senha</h1>
         {forgotSent ? (
           <p style={{ fontSize: 13 }}>
@@ -85,7 +85,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main style={{ maxWidth: 360, margin: "80px auto", fontFamily: "sans-serif" }}>
+    <main style={{ maxWidth: 360, margin: "80px auto", padding: "0 20px", fontFamily: "sans-serif" }}>
       <h1 style={{ fontSize: 22, marginBottom: 24 }}>Cadastre</h1>
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
         <input

@@ -7,8 +7,10 @@ import { logout } from "@/lib/actions";
 const TITLES: Record<string, string> = {
   "/dashboard": "Painel",
   "/imoveis": "Imóveis",
+  "/proprietarios": "Proprietários",
   "/inquilinos": "Inquilinos",
   "/contratos": "Contratos",
+  "/modelos-contrato": "Modelos de Contrato",
   "/financeiro": "Boletos & Juros",
   "/gastos": "Controle de Gastos",
   "/ganhos": "Meus Ganhos",
@@ -24,7 +26,15 @@ function titleFor(pathname: string) {
   return TITLES[base] ?? "Cadastre";
 }
 
-export function Topbar({ userName, userRole }: { userName: string; userRole: string }) {
+export function Topbar({
+  userName,
+  userRole,
+  onMenuClick,
+}: {
+  userName: string;
+  userRole: string;
+  onMenuClick?: () => void;
+}) {
   const pathname = usePathname();
   const initials = userName
     .split(" ")
@@ -36,7 +46,14 @@ export function Topbar({ userName, userRole }: { userName: string; userRole: str
   return (
     <div className="topbar">
       <div className="topbar-inner">
-        <div className="topbar-title">{titleFor(pathname)}</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <button className="menu-toggle" onClick={onMenuClick} aria-label="Abrir menu" title="Abrir menu">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <div className="topbar-title">{titleFor(pathname)}</div>
+        </div>
         <div className="topbar-right">
           <div className="search-box">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

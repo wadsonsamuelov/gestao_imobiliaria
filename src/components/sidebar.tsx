@@ -38,11 +38,11 @@ const NAV = [
   { label: "Registro", items: [{ href: "/historico", name: "Histórico do Imóvel", Icon: IconHistory }] },
 ];
 
-export function Sidebar() {
+export function Sidebar({ open = false, onNavigate }: { open?: boolean; onNavigate?: () => void }) {
   const pathname = usePathname();
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar${open ? " open" : ""}`}>
       <div className="brand">
         <div className="brand-mark">
           <svg width="22" height="38" viewBox="0 0 22 38" fill="none" stroke="#D4B45E" strokeWidth="1.1">
@@ -65,7 +65,7 @@ export function Sidebar() {
           <div key={section.label}>
             <div className="nav-group-label">{section.label}</div>
             {section.items.map(({ href, name, Icon }) => (
-              <Link key={href} href={href} className={`nav-item${pathname.startsWith(href) ? " active" : ""}`}>
+              <Link key={href} href={href} onClick={onNavigate} className={`nav-item${pathname.startsWith(href) ? " active" : ""}`}>
                 <Icon />
                 <span>{name}</span>
               </Link>

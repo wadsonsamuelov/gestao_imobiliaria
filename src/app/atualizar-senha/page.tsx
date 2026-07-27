@@ -56,7 +56,7 @@ export default function AtualizarSenhaPage() {
   }
 
   return (
-    <main style={{ maxWidth: 360, margin: "80px auto", fontFamily: "sans-serif" }}>
+    <main style={{ maxWidth: 360, margin: "80px auto", padding: "0 20px", fontFamily: "sans-serif" }}>
       <h1 style={{ fontSize: 22, marginBottom: 24 }}>Nova senha</h1>
 
       {!ready && (
